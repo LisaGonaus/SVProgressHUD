@@ -427,7 +427,8 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         
         // Accessibility support
         self.accessibilityIdentifier = @"SVProgressHUD";
-        self.isAccessibilityElement = YES;
+        // Disable accessibility for the container view to enable access to the views inside of it
+        self.isAccessibilityElement = NO;
         
         _isInitializing = NO;
     }
@@ -566,6 +567,8 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 - (void)setStatus:(NSString*)status {
     self.statusLabel.text = status;
+    // Add an accessibility identifier to the label for ui tests (e.g. appium)
+    self.statusLabel.accessibilityIdentifier = status;
     self.statusLabel.hidden = status.length == 0;
     [self updateHUDFrame];
 }
@@ -918,8 +921,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
                                                                   userInfo:[self notificationUserInfo]];
                 
                 // Update accessibility
-                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, self.statusLabel.text);
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusLabel);
                 
                 // Dismiss automatically if a duration was passed as userInfo. We start a timer
                 // which then will call dismiss after the predefined duration
@@ -950,8 +952,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         [self setNeedsDisplay];
     } else {
         // Update accessibility
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
-        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, self.statusLabel.text);
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self.statusLabel);
         
         // Dismiss automatically if a duration was passed as userInfo. We start a timer
         // which then will call dismiss after the predefined duration
