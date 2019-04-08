@@ -1019,6 +1019,8 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
                     UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
                     [rootController setNeedsStatusBarAppearanceUpdate];
 #endif
+                    // Ensure that the accessibility focus is updated when the view is dismissed
+                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
                     
                     // Run an (optional) completionHandler
                     if (completion) {
